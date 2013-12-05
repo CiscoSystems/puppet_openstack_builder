@@ -50,3 +50,12 @@ swift_service_password: swift_pass
 swift_hash: super_secret_swift_hash
 glance::backend::swift::swift_store_key: secret_key
 glance::backend::swift::swift_store_auth_address: '127.0.0.1'
+
+# uncomment and adjust to install and configure cobbler
+#cobbler::node_netmask: '255.255.255.0'
+#cobbler::domain_name: '${domain_name}'
+#cobbler::ip: "%{ipaddress_eth0}"
+#cobbler::node_dns: "10.0.2.15"
+#cobbler::node_subnet: "10.0.2.0"
+#cobbler::subnet: '10.0.2.0'
+#cobbler::ucsm_port: '443'
