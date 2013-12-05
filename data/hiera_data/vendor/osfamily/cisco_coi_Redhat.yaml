@@ -1,0 +1,2 @@
+puppet::master::version: latest
+puppet::agent::version: latest

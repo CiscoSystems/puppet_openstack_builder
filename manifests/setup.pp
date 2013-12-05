@@ -5,25 +5,24 @@
 #
 
 
-# setup up puppetlabs repos and install Puppet 3.2
+# setup up Cisco repos and install Puppet 3.2
 #
-# it makes my life easier if I can assume Puppet 3.2
-# b/c then the other manifests can utilize hiera!
-# this is not required for bare-metal b/c we can assume
-# that Puppet will be installed on the bare-metal nodes
-# with the correct version
-include puppet::repo::puppetlabs
+# we include Puppet 3.2 in the Cisco repo to avoid external
+# dependencies
+#
+# rely on install.sh to set up Cisco repo for now
+# 
 
 case $::osfamily {
   'Redhat': {
-    $puppet_version = '3.2.3-1.el6'
+    $puppet_version = latest
     $pkg_list       = ['git', 'curl', 'httpd']
   }
   'Debian': {
-    $puppet_version = '3.2.3-1puppetlabs1'
+    $puppet_version = latest
     $pkg_list       = ['git', 'curl', 'vim', 'cobbler']
     package { 'puppet-common':
-      ensure => $puppet_version,
+      ensure  => $puppet_version,
     }
   }
 }
@@ -80,6 +79,7 @@ if $::puppet_run_mode != 'agent' {
   - jenkins
   - user.%{scenario}
   - user.common
+  - "vendor/osfamily/cisco_coi_%{osfamily}"
   - "osfamily/%{osfamily}"
   - "enable_ha/%{enable_ha}"
   - "install_tempest/%{install_tempest}"
@@ -93,6 +93,7 @@ if $::puppet_run_mode != 'agent' {
   - "password_management/%{password_management}"
   - "scenario/%{scenario}"
   - grizzly_hack
+  - vendor/cisco_coi_common
   - common
 :yaml:
    :datadir: /etc/puppet/data/hiera_data
