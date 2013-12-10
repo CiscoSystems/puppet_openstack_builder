@@ -71,12 +71,12 @@ ceph_public_interface: 'eth1'
 ceph_public_network: '10.0.0.0/24'
 
 # cobbler config
-#cobbler::node_netmask: '255.255.255.0'
-#cobbler::domain_name: "%{domain}"
-#cobbler::ip: "%{ipaddress_eth0}"
-#cobbler::node_dns: '10.0.2.15'
-#cobbler::node_subnet: '10.0.2.0'
-#cobbler::subnet: '10.0.2.0'
-#cobbler::ucsm_port: '443'
-#cobbler::dhcp_service: 'dnsmasq'
-#cobbler::dns_service: 'dnsmasq'
+cobbler::node_netmask: '255.255.255.0'
+cobbler::domain_name: "%{domain}"
+cobbler::ip: "%{ipaddress_eth0}"
+cobbler::node_dns: '10.0.2.15'
+cobbler::node_subnet: '10.0.2.0'
+cobbler::subnet: '10.0.2.0'
+cobbler::ucsm_port: '443'
+cobbler::dhcp_service: 'dnsmasq'
+cobbler::dns_service: 'dnsmasq'
