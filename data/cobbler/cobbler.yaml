@@ -1,4 +1,5 @@
 preseed:
+  repo: "havana-proposed"
 
 profile:
   name: "precise"
