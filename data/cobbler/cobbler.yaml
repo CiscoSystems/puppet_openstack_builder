@@ -1,6 +1,6 @@
 preseed:
   repo: "http://openstack-repo.cisco.com/openstack/cisco havana-proposed main"
-
+#  repo: "ftp://ftpeng.cisco.com/openstack/cisco havana-proposed main"
 profile:
   name: "precise"
   arch: "x86_64"
@@ -36,27 +36,27 @@ build-server:
     eth0:
       mac-address: "a1:bb:cc:dd:ee:ff"
       dns-name: "build-server.cisco.com"
-      ip-address: "192.168.242.100"
+      ip-address: "192.168.242.101"
       static: "0"
 
-load-balancer-1:
-  hostname: "load-balancer-1.cisco.com"
+load-balancer01:
+  hostname: "load-balancer01.cisco.com"
   power-address: "192.168.2.102"
   interfaces:
     eth0:
       mac-address: "aa:b1:cc:dd:ee:ff"
-      dns-name: "load-balancer-1.cisco.com"
-      ip-address: "192.168.242.101"
+      dns-name: "load-balancer01.cisco.com"
+      ip-address: "192.168.242.102"
       static: "0"
 
-load-balancer-2:
-  hostname: "load-balancer-2.cisco.com"
+load-balancer02:
+  hostname: "load-balancer02.cisco.com"
   power-address: "192.168.2.103"
   interfaces:
     eth0:
       mac-address: "aa:bb:c1:dd:ee:ff"
       dns-name: "load-balancer-2.cisco.com"
-      ip-address: "192.168.242.102"
+      ip-address: "192.168.242.103"
       static: "0"
       
 swift-proxy01:
@@ -66,7 +66,7 @@ swift-proxy01:
     eth0:
       mac-address: "aa:bb:cc:d1:ee:ff"
       dns-name: "swift-proxy01.cisco.com"
-      ip-address: "192.168.242.103"
+      ip-address: "192.168.242.104"
       static: "0"      
       
 swift-proxy02:
@@ -76,7 +76,7 @@ swift-proxy02:
     eth0:
       mac-address: "aa:bb:cc:dd:e1:ff"
       dns-name: "swift-proxy02.cisco.com"
-      ip-address: "192.168.242.104"
+      ip-address: "192.168.242.105"
       static: "0" 
       
 swift-storage01:
@@ -86,7 +86,7 @@ swift-storage01:
     eth0:
       mac-address: "aa:bb:cc:dd:ee:f1"
       dns-name: "swift-storage01.cisco.com"
-      ip-address: "192.168.242.105"
+      ip-address: "192.168.242.106"
       static: "0"           
 
 swift-storage02:
@@ -96,7 +96,7 @@ swift-storage02:
     eth0:
       mac-address: "a2:bb:cc:dd:ee:ff"
       dns-name: "swift-storage02.cisco.com"
-      ip-address: "192.168.242.106"
+      ip-address: "192.168.242.107"
       static: "0" 
 
 swift-storage03:
@@ -106,7 +106,7 @@ swift-storage03:
     eth0:
       mac-address: "aa:b2:cc:dd:ee:ff"
       dns-name: "swift-storage03.cisco.com"
-      ip-address: "192.168.242.107"
+      ip-address: "192.168.242.108"
       static: "0"       
 
 control-server:
@@ -116,27 +116,37 @@ control-server:
     eth0:
       mac-address: "aa:bb:c2:dd:ee:ff"
       dns-name: "control-server.cisco.com"
-      ip-address: "192.168.242.108"
+      ip-address: "192.168.242.109"
       static: "0"
-
-control-server2:
-  hostname: "control-server2.cisco.com"
+      
+control-server01:
+  hostname: "control-server01.cisco.com"
   power-address: "192.168.2.110"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:d2:ee:ff"
-      dns-name: "control-server2.cisco.com"
-      ip-address: "192.168.242.109"
+      dns-name: "control-server01.cisco.com"
+      ip-address: "192.168.242.1110"
       static: "0"
-
-control-server3:
-  hostname: "control-server3.cisco.com"
-  power-address: "192.168.2.112"
+      
+control-server02:
+  hostname: "control-server02.cisco.com"
+  power-address: "192.168.2.111"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:dd:e2:ff"
-      dns-name: "control-server3.cisco.com"
-      ip-address: "192.168.242.110"
+      dns-name: "control-server02.cisco.com"
+      ip-address: "192.168.242.111"
+      static: "0"
+
+control-server03:
+  hostname: "control-server03.cisco.com"
+  power-address: "192.168.2.112"
+  interfaces:
+    eth0:
+      mac-address: "aa:bb:cc:dd:ee:f2"
+      dns-name: "control-server03.cisco.com"
+      ip-address: "192.168.242.112"
       static: "0" 
            
 compute-server:
@@ -144,27 +154,37 @@ compute-server:
   power-address: "192.168.2.113"
   interfaces:
     eth0:
-      mac-addres: "aa:bb:cc:dd:ee:f2"
+      mac-addres: "a3:bb:cc:dd:ee:ff"
       dns-name: "compute-server.cisco.com"
-      ip-address: "192.168.242.111"
+      ip-address: "192.168.242.113"
       static: "0"
       
-compute-server2:
-  hostname: "compute-server2.cisco.com"
+compute-server01:
+  hostname: "compute-server01.cisco.com"
   power-address: "192.168.2.114"
   interfaces:
     eth0:
-      mac-addres: "a3:bb:cc:dd:ee:ff"
-      dns-name: "compute-server.cisco.com"
+      mac-addres: "aa:b3:cc:dd:ee:ff"
+      dns-name: "compute-server01.cisco.com"
+      ip-address: "192.168.242.114"
+      static: "0"
+      
+compute-server02:
+  hostname: "compute-server02.cisco.com"
+  power-address: "192.168.2.115"
+  interfaces:
+    eth0:
+      mac-addres: "aa:bb:c3:dd:ee:ff"
+      dns-name: "compute-server02.cisco.com"
       ip-address: "192.168.242.115"
       static: "0"      
 
-compute-server3:
-  hostname: "compute-server3.cisco.com"
+compute-server03:
+  hostname: "compute-server03.cisco.com"
   power-address: "192.168.2.116"
   interfaces:
     eth0:
-      mac-addres: "aa:b3:cc:dd:ee:ff"
-      dns-name: "compute-server.cisco.com"
-      ip-address: "192.168.242.113"
-      static: "0"      
+      mac-addres: "aa:bb:cc:d3:ee:ff"
+      dns-name: "compute-server03.cisco.com"
+      ip-address: "192.168.242.116"
+      static: "0"
