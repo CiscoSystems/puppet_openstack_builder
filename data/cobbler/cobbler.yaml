@@ -1,5 +1,5 @@
 preseed:
-  repo: "havana-proposed"
+  repo: "http://openstack-repo.cisco.com/openstack/cisco havana-proposed main"
 
 profile:
   name: "precise"
