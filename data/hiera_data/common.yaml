@@ -42,6 +42,7 @@ glance::backend::swift::swift_store_create_container_on_put: true
 
 
 openstack::swift::storage-node::storage_type: loopback
+openstack::swift::storage-node:swift_zone : 1
 openstack::swift::storage-node::storage_devices:
   - 1
   - 2
