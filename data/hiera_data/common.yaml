@@ -40,6 +40,7 @@ cinder::volume::iscsi::iscsi_ip_address: 0.0.0.0
 glance::backend::swift::swift_store_user: services:swift
 glance::backend::swift::swift_store_create_container_on_put: true
 
+openstack::swift::proxy::memcached: false
 openstack::swift::storage-node::swift_zone: 1
 openstack::swift::storage-node::ring_server: '127.0.0.1'
 openstack::swift::storage-node::storage_type: loopback
