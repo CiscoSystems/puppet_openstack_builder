@@ -1,9 +1,26 @@
+# cobbler config
+# Set these options when using cobbler to configure how networking on
+# the nodes it installs will be set up
+#
+# subnet is the subnet of the nodes being installed
+# node_subnet should be the same as node_subnet
+# node_netmask is the netmask for that subnet
+# node_gateway is optional and used to specify a default gateway for the nodes
+# node_dns defines the DNS server to set on the nodes being installed
+# domain_name defines the domain being set on the nodes being installed
+# ip specifies the IP address of the cobbler server
+# ucsm_port is optional and is used when managing nodes via UCSM to select
+#   which port UCSM is listening on, typically either 443 or 80
+# dhcp and dns define what software to use for DHCP and DNS on the cobbler
+#   server. dnsmasq is the default and tested option
+#
+cobbler::subnet: '10.0.2.0'
+cobbler::node_subnet: '10.0.2.0'
 cobbler::node_netmask: '255.255.255.0'
+cobbler::node_gateway: '10.0.2.1'
+cobbler::node_dns: '10.0.2.15'
 cobbler::domain_name: "%{domain}"
 cobbler::ip: "%{ipaddress_eth0}"
-cobbler::node_dns: '10.0.2.15'
-cobbler::node_subnet: '10.0.2.0'
-cobbler::subnet: '10.0.2.0'
 cobbler::ucsm_port: '443'
 cobbler::dhcp_service: 'dnsmasq'
 cobbler::dns_service: 'dnsmasq'
