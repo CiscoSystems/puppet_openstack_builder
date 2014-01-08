@@ -1,3 +1,12 @@
+# For proxy service if necessary.
+#proxy: 'http://proxy-server.domain.com:8080'
+
+# Disk partitioning options.
+root_part_size: 65536
+var_part_size: 432000
+enable_var: true
+enable_vol_space: true
+
 domain_name: domain.name
 ntp_servers:
   - time-server.domain.name

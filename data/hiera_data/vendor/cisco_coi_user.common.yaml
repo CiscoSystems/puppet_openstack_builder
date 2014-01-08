@@ -7,3 +7,8 @@ cobbler::subnet: '10.0.2.0'
 cobbler::ucsm_port: '443'
 cobbler::dhcp_service: 'dnsmasq'
 cobbler::dns_service: 'dnsmasq'
+
+# Options to configure the Ubuntu install
+cobbler::ubuntu::preseed::cobbler_proxy: 'http://10.0.2.15:3142'
+cobbler::ubuntu::preseed::time_zone: 'UTC'
+cobbler::ubuntu::preseed::autostart_puppet: true
