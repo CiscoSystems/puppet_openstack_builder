@@ -25,8 +25,12 @@ service_tenant: services
 admin_tenant: admin
 package_ensure: present
 nova::compute::libvirt::libvirt_type: qemu
-nova::compute::libvirt::vncserver_listen: 0.0.0.0
 nova::compute::force_config_drive: true
+
+# enable nova to do live migration
+nova::compute::libvirt::vncserver_listen: 0.0.0.0
+nova::compute::libvirt::migration_support: true
+
 
 # information for package repos
 coe::base::package_repo: cloud_archive
