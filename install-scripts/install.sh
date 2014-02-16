@@ -111,8 +111,6 @@ quantum::agents::ovs::local_ip: "%{ipaddress}"
 neutron::agents::ovs::local_ip: "%{ipaddress}"
 EOF
 
-  # disable cobbler for AIO
-  sed -i -e "s/- coi::profiles::cobbler_server/#- coi::profiles::cobbler_server/" /root/puppet_openstack_builder/data/class_groups/build.yaml
   fi
 
   cd puppet_openstack_builder
@@ -120,7 +118,7 @@ EOF
   if [ "${install_type}" == "deb" ] ; then
     # install puppet module packages
     apt-get update
-    awk '{ printf "puppet-%s ", $0 }' modules.list  | xargs apt-get install
+    awk '{ printf "puppet-%s ", $0 }' modules.list  | xargs apt-get -y install
   else
     # using librarian puppet to fetch git modules based on Puppetfile
     gem install librarian-puppet-simple --no-ri --no-rdoc
