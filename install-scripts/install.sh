@@ -113,8 +113,6 @@ quantum::agents::ovs::local_ip: "%{ipaddress}"
 neutron::agents::ovs::local_ip: "%{ipaddress}"
 EOF
 
-  # disable cobbler for AIO
-  sed -i -e "s/- coi::profiles::cobbler_server/#- coi::profiles::cobbler_server/" /root/puppet_openstack_builder/data/class_groups/build.yaml
   fi
 
   cd puppet_openstack_builder
