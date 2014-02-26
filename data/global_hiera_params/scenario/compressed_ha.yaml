@@ -1,8 +1,6 @@
 ---
 db_type: galera
 rpc_type: rabbitmq
-cinder_backend: iscsi
-glance_backend: swift
 compute_type: libvirt
 # networking options
 network_service: neutron
