@@ -18,6 +18,7 @@ roles:
       - controller
       - provider_network_controller
       - test_file
+      - ceph_mon
   load_balancer:
     classes:
       - coe::base
@@ -30,6 +31,15 @@ roles:
       - cinder::setup_test_volume
     class_groups:
       - compute
+  compute_and_osd:
+    classes:
+      - coe::base
+      - coe::network::interface
+      - naginator::compute_target
+      - cinder::setup_test_volume
+    class_groups:
+      - compute
+      - ceph_osd
   swift_proxy:
     classes:
       - coe::base
