@@ -111,3 +111,6 @@ openstack::swift::storage-node::storage_devices:
   - 'sdd'
   - 'sde'
   - 'sdf'
+
+# Use ceph as the default backend for block storage
+cinder_backend: rbd
