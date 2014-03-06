@@ -358,3 +358,18 @@ horizon_neutron_options:
   'enable_lb': true
   'enable_firewall': true
   'enable_vpn': true
+
+## Live migration options ##
+
+# Live instance migration on NFS.
+# migration_support: enable NFS mount handling.
+# nfs_mount_path:  the path where nova instances are stored.
+# nfs_mount_device: the full path to your NFS resource.
+# nfs_fs_type: the mount type.
+# nfs_mount_options: options, as they would appear in fstab
+# Example config:
+#  migration_support: true
+#  nfs_mount_path: '/var/lib/nova/instances'
+#  nfs_mount_device: nfs.cisco.com:/myinstances
+#  nfs_fs_type: 'nfs'
+#  nfs_mount_options: 'auto'
