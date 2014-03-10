@@ -10,8 +10,16 @@ local=en_US \
 log_host=192.168.242.100 \
 netcfg/choose_interface=auto"
 
+profile:
+  name: "trusty"
+  arch: "x86_64"
+  kopts: "log_port=514 \
+priority=critical \
+local=en_US \
+log_host=192.168.242.100 \
+netcfg/choose_interface=auto"
+
 node-global:
-  profile: "precise-x86_64"
   power_type: "ipmitool"
   power_user: "admin"
   power_pass: "password"
@@ -50,6 +58,7 @@ build-server:
   # uncomment this line to force the added node to not PXE boot
   #netboot_enabled: "0"
   power_address: "192.168.2.101"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "a1:bb:cc:dd:ee:ff"
@@ -60,6 +69,7 @@ build-server:
 load-balancer01:
   hostname: "load-balancer01.cisco.com"
   power_address: "192.168.2.102"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:b1:cc:dd:ee:ff"
@@ -70,6 +80,7 @@ load-balancer01:
 load-balancer02:
   hostname: "load-balancer02.cisco.com"
   power_address: "192.168.2.103"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:c1:dd:ee:ff"
@@ -80,6 +91,7 @@ load-balancer02:
 swift-proxy01:
   hostname: "swift-proxy01"
   power_address: "192.168.2.104"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:d1:ee:ff"
@@ -90,6 +102,7 @@ swift-proxy01:
 swift-proxy02:
   hostname: "swift-proxy02.cisco.com"
   power_address: "192.168.2.105"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:dd:e1:ff"
@@ -100,6 +113,7 @@ swift-proxy02:
 swift-storage01:
   hostname: "swift-storage01.cisco.com"
   power_address: "192.168.2.106"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:dd:ee:f1"
@@ -110,6 +124,7 @@ swift-storage01:
 swift-storage02:
   hostname: "swift-storage02.cisco.com"
   power_address: "192.168.2.107"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "a2:bb:cc:dd:ee:ff"
@@ -120,6 +135,7 @@ swift-storage02:
 swift-storage03:
   hostname: "swift-storage03.cisco.com"
   power_address: "192.168.2.108"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:b2:cc:dd:ee:ff"
@@ -130,6 +146,7 @@ swift-storage03:
 control-server:
   hostname: "control-server.cisco.com"
   power_address: "192.168.2.109"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:c2:dd:ee:ff"
@@ -140,6 +157,7 @@ control-server:
 control-server01:
   hostname: "control-server01.cisco.com"
   power_address: "192.168.2.110"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:d2:ee:ff"
@@ -150,6 +168,7 @@ control-server01:
 control-server02:
   hostname: "control-server02.cisco.com"
   power_address: "192.168.2.111"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:dd:e2:ff"
@@ -160,6 +179,7 @@ control-server02:
 control-server03:
   hostname: "control-server03.cisco.com"
   power_address: "192.168.2.112"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:dd:ee:f2"
@@ -170,6 +190,7 @@ control-server03:
 compute-server:
   hostname: "compute-server.cisco.com"
   power_address: "192.168.2.113"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "a3:bb:cc:dd:ee:ff"
@@ -180,6 +201,7 @@ compute-server:
 compute-server01:
   hostname: "compute-server01.cisco.com"
   power_address: "192.168.2.114"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:b3:cc:dd:ee:ff"
@@ -190,6 +212,7 @@ compute-server01:
 compute-server02:
   hostname: "compute-server02.cisco.com"
   power_address: "192.168.2.115"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:c3:dd:ee:ff"
@@ -200,9 +223,21 @@ compute-server02:
 compute-server03:
   hostname: "compute-server03.cisco.com"
   power_address: "192.168.2.116"
+  profile: "precise-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:d3:ee:ff"
       dns-name: "compute-server03.cisco.com"
       ip-address: "192.168.242.116"
+      static: "0" 
+
+test-trusty-aio:
+  hostname: "test-trusty-aio.cisco.com"
+  power_address: "192.168.2.116"
+  profile: "trusty-x86_64"
+  interfaces:
+    eth0:
+      mac-address: "aa:bb:cc:99:88:ff"
+      dns-name: "test-trusty-aio.cisco.com"
+      ip-address: "192.168.242.117"
       static: "0" 
