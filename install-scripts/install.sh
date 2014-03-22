@@ -3,6 +3,7 @@
 # this script converts the node
 # it runs on into a puppetmaster/build-server
 #
+exec 1> /var/log/puppet_openstack_builder.log 2>&1
 set -u
 set -x
 set -e
