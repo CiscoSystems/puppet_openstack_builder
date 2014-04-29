@@ -4,3 +4,5 @@ ceph_configuration_file:
   - glance::backend::rbd::rbd_store_ceph_conf
 glance_ceph_pool:
   - glance::backend::rbd::rbd_store_pool
+glance_enable_cow:
+  - glance::api::show_image_direct_url

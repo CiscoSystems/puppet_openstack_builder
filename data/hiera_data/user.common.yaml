@@ -332,6 +332,9 @@ cinder_rbd_pool: 'volumes'
 # The name of the pool used to store glance images.
 glance_ceph_pool: 'images'
 
+# Use COW cloning of glance images stored in Ceph to Cinder volumes
+glance_enable_cow: 'true'
+
 ### The following parameters relate to Neutron L4-L7 services.
 
 # A boolean specifying whether to enable the Neutron Load Balancing
