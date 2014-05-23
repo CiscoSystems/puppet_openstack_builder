@@ -120,7 +120,7 @@ private_interface: eth1
 ### Cobbler config
 # The IP address of the node on which Cobbler will be installed and
 # on which it will listen.
-cobbler_node_ip: 192.168.242.10
+cobbler::server_ip: 192.168.242.10
 
 # The subnet address of the subnet on which Cobbler should serve DHCP
 # addresses.

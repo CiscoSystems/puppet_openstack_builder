@@ -4,7 +4,10 @@ classes:
   - apache::mod::wsgi
   - apache::mod::proxy_http
   - collectd
-  - coi::profiles::cobbler_server
+  - cobbler
+  - coe::cobbler::distro
+  - coe::cobbler::profile
+  - coe::cobbler::system
   - coi::profiles::cache_server
   - coi::profiles::puppet::master
   - graphite

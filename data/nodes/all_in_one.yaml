@@ -12,7 +12,6 @@ nodes:
     image:      'precise-x86_64'
     networks:
       ci:
-        - 'cobbler_node_ip'
         - 'build_server_ip'
 
   all-in-one:

@@ -1,0 +1,4 @@
+cobbler_distros:
+  precise-x86_64:
+    arch:    'x86_64'
+    isolink: 'http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/mini.iso'

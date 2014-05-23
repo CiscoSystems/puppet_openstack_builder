@@ -1,0 +1,6 @@
+cobbler_profiles:
+  precise-x86_64:
+    ensure:      present
+    distro:      'precise-x86_64'
+    nameservers: "$cobbler::nameservers"
+    kickstart:   '/var/lib/cobbler/kickstarts/ubuntu-server.preseed'

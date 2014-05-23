@@ -240,16 +240,12 @@ public_interface:
   - collectd::management_interface
 pocket:
   - coe::base::pocket
-  - coi::profiles::cobbler_server::pocket
 openstack_release:
   - coe::base::openstack_release
-  - coi::profiles::cobbler_server::openstack_release
 openstack_repo_location:
   - coe::base::openstack_repo_location
-  - coi::profiles::cobbler_server::openstack_repo_location
 supplemental_repo:
   - coe::base::supplemental_repo
-  - coi::profiles::cobbler_server::supplemental_repo
 puppet_repo:
   - coi::profiles::openstack::base::puppet_repo
   - coe::base::puppet_repo
