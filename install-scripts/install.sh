@@ -102,7 +102,7 @@ ntp_servers:
 build_node_name: ${build_server}
 coe::base::controller_hostname: "${build_server}"
 controller_internal_address: "${build_server_ip}"
-cobbler_node_ip: "${build_server_ip}"
+cobbler::server_ip: "${build_server_ip}"
 controller_public_address: "${build_server_ip}"
 controller_admin_address: "${build_server_ip}"
 controller_public_url: "${default_protocol}://${build_server_ip}:5000"
@@ -126,8 +126,6 @@ quantum::agents::ovs::local_ip: "%{ipaddress}"
 neutron::agents::ovs::local_ip: "%{ipaddress}"
 EOF
 
-  # disable cobbler for AIO
-  sed -i -e "s/- coi::profiles::cobbler_server/#- coi::profiles::cobbler_server/" /root/puppet_openstack_builder/data/class_groups/build.yaml
   fi
 
   cd puppet_openstack_builder

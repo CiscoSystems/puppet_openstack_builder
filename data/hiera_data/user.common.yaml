@@ -1,4 +1,3 @@
-
 #### Build Node Cobbler Information ######## 
 
 # If you use an HTTP/HTTPS proxy to reach the apt repositories that
@@ -120,22 +119,35 @@ private_interface: eth1
 ### Cobbler config
 # The IP address of the node on which Cobbler will be installed and
 # on which it will listen.
-cobbler_node_ip: 192.168.242.10
+cobbler::server_ip: 192.168.242.10
+cobbler::next_server_ip: 192.168.242.10
 
-# The subnet address of the subnet on which Cobbler should serve DHCP
-# addresses.
-node_subnet: '192.168.242.0'
+# Name servers for Cobbler to use
+cobbler::nameservers: 192.168.242.10
 
-# The netmask of the subnet on which Cobbler should serve DHCP addresses.
-node_netmask: '255.255.255.0'
+# Cobbler dnsmasq subnet
+cobbler::dhcp_subnet: 192.168.242.0
 
-# The default gateway that should be provided to DHCP clients that acquire
-# an address from Cobbler.
-node_gateway: '192.168.242.1'
+# Cobbler dnsmasq netmask
+cobbler::dhcp_netmask: 255.255.255.0
 
-# The admin username and crypted password used to authenticate to Cobbler.
-admin_user: localadmin
-password_crypted: $6$UfgWxrIv$k4KfzAEMqMg.fppmSOTd0usI4j6gfjs0962.JXsoJRWa5wMz8yQk4SfInn4.WZ3L/MCt5u.62tHDGB36EhiKF1
+# Cobbler dnsmasq option routers
+cobbler::dhcp_option_routers: 192.168.242.1
+
+# Cobbler dnsmasq IP range
+cobbler::dhcp_range: '192.168.242.0,static,255.255.255.0'
+
+# Cobbler DHCP interfaces
+cobbler::dhcp_interfaces: 'eth0'
+
+# Baremetal systems domain name
+cobbler::dhcp_option_domain_name: 'cisco.com'
+
+# Baremetal systems subnet
+cobbler::dhcp_option_subnet: '255.255.255.0'
+
+# Cobbler server identifier
+cobbler::server_identifier: '192.168.242.10'
 
 # Cobbler can instruct nodes being provisioned to start a Puppet agent
 # immediately upon bootup.  This is generally desirable as it allows
@@ -144,7 +156,47 @@ password_crypted: $6$UfgWxrIv$k4KfzAEMqMg.fppmSOTd0usI4j6gfjs0962.JXsoJRWa5wMz8y
 # purposes to prevent Puppet from starting automatically upon bootup.
 # If you want Puppet to run automatically on bootup, set this to true.
 # Otherwise, set it to false.
+
+# support for this to be added 
 autostart_puppet: true
+
+# preseeding information
+cobbler::diskpart: ['/dev/sda']
+cobbler::expert_disk: true
+cobbler::boot_disk: '/dev/sda'
+cobbler::root_part_size: 65536
+cobbler::enable_var: true
+cobbler::var_part_size: 432000
+cobbler::enable_var_space: true
+cobbler::ntp_server: '192.168.242.10'
+cobbler::time_zone: UTC
+cobbler::admin_user: 'localadmin'
+cobbler::password_crypted: '$6$UfgWxrIv$k4KfzAEMqMg.fppmSOTd0usI4j6gfjs0962.JXsoJRWa5wMz8yQk4SfInn4.WZ3L/MCt5u.62tHDGB36EhiKF1'
+cobbler::packages: 'openssh-server vim vlan lvm2 ntp'
+cobbler::server_ip: '192.168.242.10'
+#cobbler::early_command: ''
+cobbler::openstack_repo_location: 'http://openstack-repo.cisco.com/openstack/cisco'
+cobbler::openstack_release: 'icehouse-proposed'
+cobbler::pocket: ''
+cobbler::supplemental_repo: 'http://openstack-repo.cisco.com/openstack/cisco_supplemental'
+cobbler::late_command: 'sed -e "/logdir/ a pluginsync=true" -i /target/etc/puppet/puppet.conf ; \
+sed -e "/logdir/ a server=%s" -i /target/etc/puppet/puppet.conf ; \
+echo -e "server %s iburst" > /target/etc/ntp.conf ; \
+echo -e "%s" >> /target/etc/modules ; \
+sed -e "s/^ //g" -i /target/etc/modules ; \
+%s ; \
+echo "net.ipv6.conf.default.autoconf=%s" >> /target/etc/sysctl.conf ; \
+echo "net.ipv6.conf.default.accept_ra=%s" >> /target/etc/sysctl.conf ; \
+echo "net.ipv6.conf.all.autoconf=%s" >> /target/etc/sysctl.conf ; \
+echo "net.ipv6.conf.all.accept_ra=%s" >> /target/etc/sysctl.conf ; \
+ifconf="`tail +11 </etc/network/interfaces`" ; \
+echo -e "%s
+" > /target/etc/network/interfaces ; \
+sed -e "s/^ //g" -i /target/etc/network/interfaces ; \
+%s \
+%s \
+'
+
 
 # If you are using Cisco UCS servers managed by UCSM, set the port on
 # which Cobbler should connect to UCSM in order to power nodes off and on.
@@ -245,7 +297,7 @@ swift_hash: super_secret_swift_hash
 
 # The IP address used by Swift on the control node to communicate with
 # other members of the Swift cluster.  In the compressed_ha or full_ha
-# scenarios, this will be the address to be configured as a VIP on 
+# scenarios, this will be the address to be configured as a VIP on
 # the HAProxy load balancers, not the address of an individual Swift node.
 swift_internal_address: 192.168.242.41
 
@@ -258,7 +310,7 @@ swift_public_address: 192.168.242.41
 
 # The IP address over which administrative traffic for the Swift
 # cluster will flow.  In the compressed_ha or full_ha
-# scenarios, this will be the address to be configured as a VIP on 
+# scenarios, this will be the address to be configured as a VIP on
 # the HAProxy load balancers, not the address of an individual Swift node.
 swift_admin_address: 192.168.242.41
 

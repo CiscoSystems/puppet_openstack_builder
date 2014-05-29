@@ -1,0 +1,6 @@
+cobbler_profiles:
+  trusty-x86_64:
+    ensure:      present
+    distro:      'trusty-x86_64'
+    nameservers: "$cobbler::nameservers"
+    kickstart:   '/var/lib/cobbler/kickstarts/cisco-preseed'

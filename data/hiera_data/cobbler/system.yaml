@@ -1,0 +1,26 @@
+cobbler_systems:
+  somehost.cisco.com:
+    ensure: present
+    profile: 'trusty-x86_64'
+    interfaces:
+      eth0:
+        mac_address: 'aa:bb:cc:dd:ee:f0'
+        ip_address:  '10.0.0.2'
+        netmask:     '255.255.255.0'
+      eth1:
+        mac_address: 'aa:bb:cc:dd:ee:f1'
+        ip_address:  '10.0.0.3'
+        netmask:     '255.255.255.0'
+      eth2:
+        mac_address: 'aa:bb:cc:dd:ee:f2'
+        ip_address:  '10.0.0.4'
+        netmask:     '255.255.255.0'
+    kopts: ''
+    power_type:    'ipmilan' #Cisco UCS is 'cisco_ucs'
+    power_address: '1.1.1.1'
+    power_user:    'someuser'
+    power_password: 'somepass'
+    power_id:       'some id'
+    netboot:        true
+    gateway:        '10.0.0.1'
+    hostname:       'somehost.cisco.com'
