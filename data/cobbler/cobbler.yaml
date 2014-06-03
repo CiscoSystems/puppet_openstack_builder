@@ -224,13 +224,13 @@ compute-server03:
       ip-address: "192.168.242.116"
       static: "0" 
 
-test-precise-aio:
-  hostname: "test-precise-aio.cisco.com"
+test-trusty-aio:
+  hostname: "test-trusty-aio.cisco.com"
   power_address: "192.168.2.116"
-  profile: "precise-x86_64"
+  profile: "trusty-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:99:88:fe"
-      dns-name: "test-precise-aio.cisco.com"
+      dns-name: "test-trusty-aio.cisco.com"
       ip-address: "192.168.242.118"
       static: "0" 
