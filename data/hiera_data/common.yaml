@@ -21,6 +21,9 @@ enabled_services:
   # the value configured in global_hiera_params/common.yaml
   - "%{network_service}"
   - swift
+  # NOTE: if using mongodb, comment this line out so mysql is not
+  # redundantly included
+  - ceilometer
 
 # Hosts to be allowed access to the backend database used to
 # persist data for OpenStack services (e.g. MySQL or similar).
@@ -44,17 +47,27 @@ debug: false
 # The scheduler driver to be used for Cinder.
 cinder::scheduler::scheduler_driver: 'cinder.scheduler.simple.SimpleScheduler'
 
-# The libvirt VIF driver to be used for Quantum and Neutron.
-# Both are present here in order to account for the name change
-# that occurred in Havana.  Only one will actually be used
-# depending on the network service selected in
-# global_hiera_params/common.yaml.
-nova::compute::quantum::libvirt_vif_driver: nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver
-nova::compute::neutron::libvirt_vif_driver: nova.virt.libvirt.vif.LibvirtHybridOVSBridgeDriver
+# The libvirt VIF driver to be used for Neutron.
+nova::compute::neutron::libvirt_vif_driver: nova.virt.libvirt.vif.LibvirtGenericVIFDriver
+
+# Whether or not Neutron should send notification to Nova when port
+# status is active.
+neutron::server::notifications::notify_nova_on_port_status_changes: true
+
+# Whether or not Neutron should send notification to Nova when port
+# data (fixed_ips/floatingips) change so nova can update it's cache.
+neutron::server::notifications::notify_nova_on_port_data_changes: true
+
+# Number of seconds between sending events to nova if there are any events
+# to send.
+neutron::server::notifications::send_events_interval: 2
 
 # The services and admin tenant names.
 service_tenant: services
-admin_tenant: admin
+admin_tenant: openstack
+
+# The nova admin username
+nova_admin_username: 'nova'
 
 # Many manifests that install OpenStack packages can either ensure
 # that a package is 'present' (e.g. installed) or that it is 'latest'
@@ -68,7 +81,7 @@ package_ensure: present
 # default to allow OpenStack to be deployed in nested virt setups
 # (common in CI or automated testing setups), but is frequently
 # overridden by a higher-level yaml file such as user.$scenario.yaml.
-nova::compute::libvirt::libvirt_type: qemu
+nova::compute::libvirt::libvirt_virt_type: qemu
 
 # The disk_cachemodes setting in nova.conf can be useful for
 # improving the performance of instance launches and tuning
@@ -114,7 +127,7 @@ nova::compute::force_config_drive: true
 coe::base::package_repo: cloud_archive
 
 # The base version of OpenStack to be installed (e.g. 'havana').
-openstack_release: havana
+openstack_release: icehouse
 
 # The name of the pocket to use for both
 # the supplemental and main repos.  This setting may not be useful for
@@ -147,10 +160,6 @@ openstack::test_file::image_type: cirros
 # Whether or not to install the ceilometer client library.
 # This is often overridden in higher-layer yaml files.
 openstack::client::ceilometer: false
-
-# The ISCSI IP address given to initiators when using the iSCSI driver
-# for Cinder.  This should generally match the public IP address.
-cinder::volume::iscsi::iscsi_ip_address: 0.0.0.0
 
 # How to set the swift_store_user directive in swift.conf.
 # This should be an account name and a username separated by
@@ -221,3 +230,13 @@ ensure_package: installed
 # Endpoint region
 region: RegionOne
 
+# The version of the puppetlabs-mysql module you're using.
+# Supported versions are 0.9 and 2.2.
+puppet_mysql_version: '2.2'
+
+# Allow rabbitmq cookie to be configured
+rabbitmq::server::wipe_db_on_cookie_change: true
+
+# Default character set and collation order for MySQL
+mysql_default_charset: utf8
+mysql_default_collation: utf8_unicode_ci
