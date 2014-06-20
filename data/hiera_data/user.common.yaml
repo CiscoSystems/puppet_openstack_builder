@@ -1,39 +1,3 @@
-
-#### Build Node Cobbler Information ######## 
-
-# If you use an HTTP/HTTPS proxy to reach the apt repositories that
-# packages will be installed from during installation, uncomment this
-# setting and specify the correct proxy URL.  If you do not use an
-# HTTP/HTTPS proxy, leave this setting commented out.
-#proxy: 'http://proxy-server.domain.com:8080'
-
-#### Disk partitioning options ###########
-# The /var directory is where logfiles and instance data are stored
-# on disk.  If you wish to have /var on it's own partition (considered
-# a best practice), set enable_var to true.
-enable_var: true
-
-# The Cinder volume service can make use of unallocated space within
-# the "cinder-volumes" volume group to create iscsi volumes for 
-# export to instances.  If you wish to leave free space for volumes
-# and not preallocate the entire install drive, set enable_vol_space
-# to true.
-enable_vol_space: true
-
-# Use the following two directives to set the size of the / and /var
-# partitions, respectively.  The var_part_size directive will be ignored
-# if enable_var is not set to true above.
-root_part_size: 65536
-var_part_size: 432000
-
-# This domain name will be the name your build and compute nodes use for the
-# local DNS.  It doesn't have to be the name of your corporate DNS - a local
-# DNS server on the build node will serve addresses in this domain - but if
-# it is, you can also add entries for the nodes in your corporate DNS
-# environment they will be usable *if* the above addresses are routeable
-# from elsewhere in your network.
-domain_name: domain.name
-
 ########### NTP Configuration ############
 # Change this to the location of a time server or servers in your
 # organization accessible to the build server.  The build server will
@@ -57,6 +21,14 @@ build_node_name: build-server
 # limitation (refer to http://projects.puppetlabs.com/issues/1168).
 coe::base::controller_hostname: control-server
 
+# This domain name will be the name your build and compute nodes use for the
+# local DNS.  It doesn't have to be the name of your corporate DNS - a local
+# DNS server on the build node will serve addresses in this domain - but if
+# it is, you can also add entries for the nodes in your corporate DNS
+# environment they will be usable *if* the above addresses are routeable
+# from elsewhere in your network.
+domain_name: domain.name
+
 # The IP address to be used to connect to Horizon and external
 # services on the control node.  In the compressed_ha or full_ha scenarios,
 # this will be an address to be configured as a VIP on the HAProxy
@@ -78,6 +50,15 @@ controller_internal_address: 192.168.242.10
 # be an address to be configured as a VIP on the HAProxy
 # load balancers, not the address of the control node itself.
 controller_admin_address: 192.168.242.10
+
+# Controller public url
+controller_public_url: "http://192.168.242.10:5000"
+
+# Controller admin url
+controller_admin_url: "http://192.168.242.10:35357"
+
+# Controller admin url
+controller_internal_url: "http://192.168.242.10:35357"
 
 # Control node interfaces.
 # internal_ip be used for the ovs local_ip setting for GRE tunnels.
@@ -107,6 +88,9 @@ public_interface: eth1
 # The interface used for VM networking connectivity.  This will usually
 # be set to the same interface as public_interface.
 private_interface: eth1
+
+# iSCSI listener interface. Set this the s ame as public_interface.
+cinder::volume::iscsi::iscsi_ip_address: "%{ipaddress_eth1}"
 
 ### Cobbler config
 # The IP address of the node on which Cobbler will be installed and
@@ -161,6 +145,26 @@ install_drive: /dev/sda
 # or use facter to get the IP address assigned to a particular interface.
 nova::compute::vncserver_proxyclient_address: "%{ipaddress_eth3}"
 
+# If you wish to customize the list of filters that the nova
+# scheduler will use when scheduling instances, change the line
+# below to be a comma-separated list of filters.  If set to false,
+# the nova default filter list will be used.
+# Example: 'RetryFilter,AvailabilityZoneFilter,RamFilter,
+#           ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter'
+nova::scheduler::filter::scheduler_default_filters: false
+
+# The following is a set of arbitrary config entries to be
+# created in nova.conf.  You can add arbitrary entries here
+# that are not parameterized in the puppet-nova module for special
+# use cases.
+nova::config::nova_config:
+  # Allow destination machien to match source for resize
+  'DEFAULT/allow_resize_to_same_host':
+    value: 'true'
+  # Automatically confirm resizes after N seconds.  Set to 0 to disable.
+  'DEFAULT/resize_confirm_window':
+    value: '0'
+
 ### The following are passwords and usernames used for
 ### individual services.  You may wish to change the passwords below
 ### in order to better secure your installation.
@@ -201,6 +205,12 @@ secret_key: secret
 # compromised).
 password: password123
 
+# Manage the Horizon vhost priority. Apache defaults to '25'. Here we
+# set it to '10' so it is the default site. This allows Horizon to load
+# at both it's vhost name and at the server's IP address.
+horizon::wsgi::apache::priority: 10
+
+
 ### Swift configuration
 # The username used to authenticate to the Swift cluster.
 swift_service_password: swift_pass
@@ -210,22 +220,22 @@ swift_hash: super_secret_swift_hash
 
 # The IP address used by Swift on the control node to communicate with
 # other members of the Swift cluster.  In the compressed_ha or full_ha
-# scenarios, this will be the address to be configured as a VIP on 
+# scenarios, this will be the address to be configured as a VIP on
 # the HAProxy load balancers, not the address of an individual Swift node.
-swift_internal_address: 192.168.242.41
+swift_internal_address: "%{ipaddress_eth3}"
 
 # The IP address which external entities will use to connect to Swift,
 # including clients wishing to upload or retrieve objects.  In the
 # compressed_ha or full_ha scenarios, this will be the address to
 # be configured as a VIP on the HAProxy load balancers, not the address
 # of an individual Swift node.
-swift_public_address: 192.168.242.41
+swift_public_address: "%{ipaddress_eth3}"
 
 # The IP address over which administrative traffic for the Swift
 # cluster will flow.  In the compressed_ha or full_ha
-# scenarios, this will be the address to be configured as a VIP on 
+# scenarios, this will be the address to be configured as a VIP on
 # the HAProxy load balancers, not the address of an individual Swift node.
-swift_admin_address: 192.168.242.41
+swift_admin_address: "%{ipaddress_eth3}"
 
 # The interface on which Swift will run data storage traffic.
 # This should generally be a different interface than is used for
@@ -257,9 +267,15 @@ glance::backend::swift::swift_store_key: secret_key
 # to the Swift cluster.
 glance::backend::swift::swift_store_auth_address: '127.0.0.1'
 
+# The volume name when using iSCSI for cinder
+cinder_volumes_name: 'cinder-volumes'
+
 ### Ceph configuration
 # The name of the Ceph cluster to be deployed.
 ceph_cluster_name: 'ceph'
+
+### Ceph configuration file
+ceph_configuration_file: '/etc/ceph/ceph.conf'
 
 # The FSID of the Ceph monitor node.  This should take the form
 # of a UUID.
@@ -280,6 +296,9 @@ ceph_primary_mon: 'ceph-mon01'
 # The IP address used to connect to the primary monitor node.
 ceph_monitor_address: '10.0.0.1'
 
+# The rbd account OpenStack will use to communicate with ceph.
+ceph_openstack_user: 'admin'
+
 # Ceph will be deployed using the cephdeploy tool.  This tool requires
 # a username and password to authenticate.
 ceph_deploy_user: 'cephdeploy'
@@ -299,14 +318,6 @@ ceph_public_interface: 'eth1'
 # The subnet on which external entities will connect to the Ceph cluster.
 ceph_public_network: '10.0.0.0/24'
 
-# A list of kernel modules that should be added to /etc/modules
-# and thus auto-loaded into the kernel at boot time.  It is recommended
-# that you include at least two modules: "8021q" is necessary for vlan
-# tagging, and "vhost_net" increases networking performance of instances.
-kernel_module_list:
-  - 8021q
-  - vhost_net
-
 ### The following four parameters are used only if you are configuring
 ### Ceph to be a backend for the Cinder volume service.
 
@@ -314,21 +325,22 @@ kernel_module_list:
 # the line below.  It can also be set to 'iscsi'.
 #cinder_backend: rbd
 
-# The username Cinder should use to connect to the cluster.
-cinder_rbd_user: 'admin'
-
 # The name of the pool used to store Cinder volumes.`
 cinder_rbd_pool: 'volumes'
-
-# The UUID of the shared virsh secret used by Cinder to
-# authenticate to the Ceph cluster.
-cinder_rbd_secret_uuid: 'e80afa94-a64c-486c-9e34-d55e85f26406'
 
 ### The following parameter is used only if you are deploying Ceph
 ### as a backend for the Glance image service.
 
 # The name of the pool used to store glance images.
 glance_ceph_pool: 'images'
+
+# Return the URL that references where the data is stored on
+# the backend storage system.  For example, if using the
+# file system store a URL of 'file:///path/to/image' will
+# be returned to the user in the 'direct_url' meta-data field.
+# This gives glance the ability to COW images, but revealing the
+# storage location may be a security risk.
+glance::api::show_image_direct_url: false
 
 ### The following parameters relate to Neutron L4-L7 services.
 
@@ -349,6 +361,14 @@ service_plugins:
   - 'neutron.services.loadbalancer.plugin.LoadBalancerPlugin'
   - 'neutron.services.firewall.fwaas_plugin.FirewallPlugin'
   - 'neutron.services.vpn.plugin.VPNDriverPlugin'
+
+# Set the interface driver
+interface_driver: 'neutron.agent.linux.interface.OVSInterfaceDriver'
+
+# Set the external network bridge.
+# NOTE: If you change this, make sure to update the
+# bridge mapping in tenant_network_type/*.yaml
+external_network_bridge: 'br-ex'
 
 # A hash of Neutron services to enable GUI support for in Horizon.
 # enable_lb: Enables Neutron LBaaS agent support.
@@ -393,65 +413,55 @@ ssl_ca_key: '/etc/keystone/ssl/private/cakey.pem'
 # SSL cert subject
 ssl_cert_subject: '/C=US/ST=Unset/L=Unset/O=Unset/CN=localhost'
 
-## Cisco plugin settings
-# Uncomment and adjust the lines below if you wish to use the Cisco
-# Nexus plugin.  Make sure you also:
-# 1.) Set the tenant_network_type (vlan or gre) in 
-#     ../global_hiera_params/common.yaml
-# 2.) Set the network_vlan_ranges to the vlan range you want to use
-#     in hiera_data/tenant_network_type/vlan.yaml if using vlans
-#     for tenant segmentation (as opposed to GRE).
-# 3.) Add these two lines to ../class_groups/network_controller.yaml:
-#     - "coe::nexus"
-#     - "neutron::plugins::cisco"
-# 4.) Uncomment the "Cisco plugin support" section of the
-#     ../data_mappings/common.yaml file.
-# 5.) Because the Ubuntu init scripts assume only one plugin will
-#     be used, if you are using the Cisco plugin and OVS together
-#     you may need to start neutron manually rather than via an init
-#     script.  The command is:
-#     /usr/bin/python /usr/bin/neutron-server --config-file \
-#     /etc/neutron/neutron.conf --log-file /var/log/neutron/server.log \
-#     --config-file /etc/neutron/plugins/cisco/cisco_plugins.ini \
-#     --config-file /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
-
-
-# Use the Cisco plugin.  Note that we set this here rather than in
-# global_hiera_params because in most use cases we'll want to set up
-# both the Cisco plugin and the OVS plugin (and because the
-# Cisco plugin by itself is agentless).
-#neutron::core_plugin: 'neutron.plugins.cisco.network_plugin.PluginV2'
-
-# The Nexus sub-plugin to use.
-#nexus_plugin: 'neutron.plugins.cisco.nexus.cisco_nexus_plugin_v2.NexusPlugin'
-
-# The vswitch sub-plugin to use with the Cisco plugin.
-#vswitch_plugin: 'neutron.plugins.openvswitch.ovs_neutron_plugin.OVSNeutronPluginV2'
-
-# The credentials to use to log into each Nexus switch in your topology.
-# This should be an array of strings of the following form (switch IP
-# address, username, and password separated by forward slashes):
-# - 'switch1 IP address/username/password'
-# - 'switch2 IP address/username/password'
-#nexus_credentials:
-#  - '172.18.117.27/admin/password'
-
-# Switch configuration information.  This is a hash for each switch in
-# your topology.  The format for each entry is:
-#    'switch_name':    # The switch's hostname or other unique identifier
-#    'ip_address': '192.168.2.81' # The IP of the switch
-#    'username': 'admin'  # The username to log in with
-#    'password': 'password' # The password to log in with
-#    'ssh_port': 22  # The port NETCONF messages should be sent to via SSH
-#    'servers':
-#      'server1': '1/1'  # Hostname of a server and the port it is connected to
-#      'server2': '1/2'
+# MySQL server options
 #
-#nexus_config:
-#  'cvf2-leaf-f1':
-#    'ip_address': '172.18.117.27'
-#    'username': 'admin'
-#    'password': 'password'
-#    'ssh_port': 22
-#    'servers':
-#      'control01': '1/7'
+# override_options is used to pass a hash of options to be set in
+# /etc/mysql/my.cnf. The options are separated by the section of my.cnf
+# to which they belong
+#
+# Options which need to be set in the mysqld section of my.cnf include:
+#   bind-address: specifies the IP address on which the MySQL daemon listens
+#   max-connections: specifies the number of simultaneous connections permitted
+#   max_connect_errors: production deployments typically set this to 2^32-1
+#
+# In the isamchk section, key_buffer_size determines how much memory will be
+# used to buffer index blocks for MyISAM tables
+#
+# Note that any other valid MySQL config file parameters can be added as
+# needed by using this override_options mechanism. See override_options in
+# https://github.com/puppetlabs/puppetlabs-mysql/tree/2.2.x#reference for more
+# details on using this parameter with custom options.
+mysql::server::override_options:
+  mysqld:
+    bind-address: 192.168.242.10
+    max-connections: 8192
+    max_connect_errors: 4294967295
+  isamchk:
+    key_buffer_size: 64M
+# if true, restart MySQL when config options are changed. true is appropriate
+# for most installations
+mysql::server::restart: true
+
+## NFS Live migration options ##
+# If on a debian-based distro, you must also set the nova uid/gid
+# when using live migration. This is not needed for RHEL distros
+# as they predefine the uid/gid.
+
+# You can also manage the nova user's uid and gid. You will have to enable
+# this in order to use NFS or Ceph live migrations. This option should NOT
+# be used on RedHat platforms, as they already predefine the uid/gid for the
+# nova user.
+# nova::nova_user_id: '499'
+# nova::nova_group_id: '499'
+
+# migration_support: enable NFS mount handling.
+# nfs_mount_path:  the path where nova instances are stored.
+# nfs_mount_device: the full path to your NFS resource.
+# nfs_fs_type: the mount type.
+# nfs_mount_options: options, as they would appear in fstab
+# Example config:
+#  coe::compute::migration::migration_support: true
+#  coe::compute::migration::nfs_mount_path: '/var/lib/nova/instances'
+#  coe::compute::migration::nfs_mount_device: 'nfs.domain.com:/myinstances'
+#  coe::compute::migration::nfs_fs_type: 'nfs'
+#  coe::compute::migration::nfs_mount_options: 'auto'
