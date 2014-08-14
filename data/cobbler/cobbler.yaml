@@ -10,14 +10,6 @@ local=en_US \
 log_host=192.168.242.100 \
 netcfg/choose_interface=auto"
 
-profile:
-  name: "precise"
-  arch: "x86_64"
-  kopts: "log_port=514 \
-priority=critical \
-local=en_US \
-log_host=192.168.242.100 \
-netcfg/choose_interface=auto"
 
 node-global:
   #power_type should be ipmilan for CIMC, or ucs for UCS-M
@@ -240,13 +232,13 @@ compute-server03:
       ip-address: "192.168.242.116"
       static: "0" 
 
-test-precise-aio:
-  hostname: "test-precise-aio.cisco.com"
+test-trusty-aio:
+  hostname: "test-trusty-aio.cisco.com"
   power_address: "192.168.2.116"
-  profile: "precise-x86_64"
+  profile: "trusty-x86_64"
   interfaces:
     eth0:
       mac-address: "aa:bb:cc:99:88:fe"
-      dns-name: "test-precise-aio.cisco.com"
+      dns-name: "test-trusty-aio.cisco.com"
       ip-address: "192.168.242.118"
       static: "0" 
